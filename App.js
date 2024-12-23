@@ -10,6 +10,7 @@ import ResetPasswordScreen from './screens/auth/ResetPasswordScreen.js';
 import SettingsScreen from './screens/users/SettingsScreen.js';
 import NotificationScreen from './screens/users/NotificationScreen.js';
 import MyCourseScreen from './screens/users/MyCourseScreen.js';
+import CatalogScreen from './screens/users/CatalogScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="MyCourse" component={MyCourseScreen} />
+          <Stack.Screen name="Catalog" component={CatalogScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>

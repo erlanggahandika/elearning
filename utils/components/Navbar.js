@@ -8,29 +8,32 @@ const Navbar = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
 
+  const darkwhite = '#b3b0ad';
+  const white = '#f9f9f9';
+
   return (
     <View style={[styles.navbar, { backgroundColor: theme.darkMode ? '#121212' : '#f9f9f9' }]}>
       <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Home')}>
         <Ionicons
           name="home"
           size={30}
-          color={theme.darkMode ? '#f9f9f9' : '#121212'} 
+          color={theme.darkMode ? white : darkwhite} 
         />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={ () => navigation.navigate('MyCourse')}>
+      <TouchableOpacity style={styles.navItem} onPress={ () => navigation.navigate('Catalog')}>
         <Ionicons
           name="book"
           size={30}
-          color={theme.darkMode ? '#f9f9f9' : '#121212'} 
+          color={theme.darkMode ? white : darkwhite} 
         />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.navItem}>
         <Ionicons
-          name="chatbox"
+          name="wallet-outline"
           size={30}
-          color={theme.darkMode ? '#f9f9f9' : '#121212'} 
+          color={theme.darkMode ? white : darkwhite} 
         />
       </TouchableOpacity>
 
@@ -38,7 +41,7 @@ const Navbar = () => {
         <Ionicons
           name="settings-outline"
           size={30}
-          color={theme.darkMode ? '#f9f9f9' : '#121212'} 
+          color={theme.darkMode ? white : darkwhite} 
         />
       </TouchableOpacity>
     </View>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Animated, Image, TextInput, StatusBar } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Animated, Image, TextInput, StatusBar, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Navbar from '../../utils/components/Navbar.js';
+import TopBar from '../../utils/components/Topbar.js';
 import { useTheme } from '../../utils/hooks/themes/ThemeContext.js'; 
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,13 +15,23 @@ const HomeScreen = () => {
   const shakeAnimation = useRef(new Animated.Value(0)).current;
   const [currentBanner, setCurrentBanner] = useState(0);
 
-  
+  //declare color dlu
+  const blue = '#00bcd4';
+  const white = '#f9f9f9';
+
   const banners = [
     require('../../assets/images/banner1.jpeg'),
     require('../../assets/images/banner2.jpeg'),
     require('../../assets/images/banner1.jpeg'),
     require('../../assets/images/banner2.jpeg'),
   ];
+
+  const categoryBackgrounds = {
+    Polri: require('../../assets/images/resetpw.png'),
+    TNI: require('../../assets/images/resetpw.png'),
+    CPNS: require('../../assets/images/resetpw.png'),
+    OTHER: require('../../assets/images/resetpw.png'),
+  };
 
   useEffect(() => {
     StatusBar.setBarStyle(theme.darkMode ? 'light-content' : 'dark-content');
@@ -40,7 +51,7 @@ const HomeScreen = () => {
 
     fetchUsername();
 
-    // set banner 3 dertik
+    // set banner 3 detik
     const interval = setInterval(() => {
       setCurrentBanner((prev) => (prev + 1) % banners.length);
     }, 3000);
@@ -48,53 +59,14 @@ const HomeScreen = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleNotificationPress = () => {
-    Animated.sequence([
-      Animated.timing(shakeAnimation, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: -1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(shakeAnimation, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start( () => navigation.navigate('Notification'));
-  };
-
-  const shakeInterpolation = shakeAnimation.interpolate({
-    inputRange: [-1, 1],
-    outputRange: [-10, 10],
-  });
-
-  const animatedStyle = {
-    transform: [{ translateX: shakeInterpolation }],
-  };
-
   return (
-    <View style={[styles.container, { backgroundColor: theme.darkMode ? '#121212' : '#f9f9f9' }]}>
+    <View style={[styles.container, { backgroundColor: theme.backgroundColor}]}>
       {/* Header Section */}
-      <View style={styles.header}>
-        <Text style={[styles.headerText, { color: theme.darkMode ? '#fff' : '#00bcd4' }]}>APATCHE</Text>
-        <TouchableOpacity style={styles.notificationButton} onPress={handleNotificationPress}>
-          <Animated.View style={animatedStyle} >
-            <Ionicons name="notifications" size={30} color={theme.darkMode ? '#ffb300' : '#f5d611'} />
-          </Animated.View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={toggleDarkMode} style={styles.themeToggleButton}>
-          <Ionicons name={theme.darkMode ? 'sunny' : 'moon'} size={30} color={theme.darkMode ? '#fff' : '#000'} />
-        </TouchableOpacity>
-      </View>
+      <TopBar />
 
       {/* Main Content */}
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.greetingText, { color: theme.darkMode ? '#fff' : '#FF5722' }]}>
+        <Text style={[styles.greetingText, { color: theme.darkMode ? white : blue }]}>
           Hello, {username || 'John Doe'}!
         </Text>
 
@@ -114,27 +86,28 @@ const HomeScreen = () => {
           <Ionicons name="search" size={20} color="#757575" style={styles.searchIcon} />
         </View>
 
-        {/* Tab Section */}
-        <View style={[styles.tabs, { backgroundColor: theme.darkMode ? '#121212' : '#f9f9f9' }]}>
-          <Text style={[styles.tab, styles.allTab]}>All</Text>
-          <Text style={[styles.tab, styles.onlineCourseTab]}>Bimble Online</Text>
-          <Text style={[styles.tab, styles.offlineCourseTab]}>Bimble Offline</Text>
-        </View>
-
-        <Text style={[styles.sectionTitle, { color: theme.darkMode ? '#fff' : '#00bcd4' }]}>Catalog</Text>
-        <ScrollView horizontal={true} contentContainerStyle={styles.categoryContainer}>
-          {['Polri', 'TNI', 'CPNS', 'OTHER'].map((category, index) => (
-            <View key={index} style={styles.categoryCard}>
-              <Text style={styles.categoryCardText}>{category}</Text>
-            </View>
-          ))}
+        <Text style={[styles.sectionTitle, { color: theme.darkMode ? white : blue }]}>Catalog</Text>
+        <ScrollView horizontal={true} contentContainerStyle={styles.categoryContainer} showsHorizontalScrollIndicator={false}>
+        {['Polri', 'TNI', 'CPNS', 'OTHER'].map((category, index) => (
+        <View key={index} style={[styles.categoryCard, { backgroundColor: theme.darkMode ? '#f09724' : '#fff' }]}>
+        <ImageBackground 
+        source={categoryBackgrounds[category]} 
+        style={styles.categoryBackground} 
+        imageStyle={styles.categoryImage}
+        resizeMode="cover"
+        >
+      </ImageBackground>
+        <Text style={[styles.categoryText, { color: theme.darkMode ? white : blue }]}>{category}</Text>
+       </View>
+        ))}
         </ScrollView>
 
+
         {/* Instructor Section */}
-        <Text style={[styles.sectionTitle, { color: theme.darkMode ? '#fff' : '#00bcd4' }]}>Top Mentor Of The Week</Text>
+        <Text style={[styles.sectionTitle, { color: theme.darkMode ? white : blue }]}>Top Mentor Of The Week</Text>
 
         {/* Courses Section */}
-        <Text style={[styles.sectionTitle, { color: theme.darkMode ? '#fff' : '#00bcd4' }]}>All Course</Text>
+        <Text style={[styles.sectionTitle, { color: theme.darkMode ? white : blue }]}>All Course</Text>
         <View style={styles.cardContainer}>
           {[1, 2, 3, 4].map((course, index) => (
             <View key={index} style={styles.card}>
@@ -154,6 +127,16 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  categoryText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  categoryTextContainer: {
+    fontSize: 12,
+  fontWeight: 'bold',
+  color: '#FF5722',
+  marginTop: 5,
+  },
   container: {
     flex: 1,
   },
@@ -220,38 +203,17 @@ const styles = StyleSheet.create({
   searchIcon: {
     marginLeft: 10,
   },
-  tabs: {
-    flexDirection: 'row',
-    marginTop: 16,
-  },
-  tab: {
-    flex: 1,
-    padding: 8,
-    textAlign: 'center',
-    fontSize: 14,
-  },
-  allTab: {
-    backgroundColor: '#29c7e3',
-    color: '#f7ef05',
-  },
-  onlineCourseTab: {
-    backgroundColor: '#48cfe8',
-    color: '#fff',
-  },
-  offlineCourseTab: {
-    backgroundColor: '#83e5f7',
-    color: '#ffffff',
-  },
   categoryContainer: {
     flexDirection: 'row',
     marginTop: 16,
     gap: 10,
     justifyContent: 'flex-start',
     paddingHorizontal: 8,
+    paddingVertical: 8,
+    paddingRight: 250, //ini buat kenanan terus
   },
   categoryCard: {
-    width: '30%',
-    backgroundColor: '#ffffff',
+    width: '40%',
     borderRadius: 8,
     padding: 16,
     shadowColor: '#000',
@@ -260,8 +222,22 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     alignItems: 'center',
+    height: 140,
+    justifyContent: 'center',
+  },
+  categoryBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  categoryImage: {
+    borderRadius: 8,
   },
   categoryCardText: {
+    paddingTop: 80,
     fontSize: 14,
     fontWeight: 'bold',
     color: '#00bcd4',
@@ -299,6 +275,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#757575',
   },
+  
 });
 
 export default HomeScreen;

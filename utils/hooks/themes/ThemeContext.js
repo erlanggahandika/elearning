@@ -19,9 +19,9 @@ export const ThemeProvider = ({ children }) => {
   const toggleDarkMode = async () => {
     const newTheme = !theme.darkMode;
     const updatedTheme = {
-      darkMode: newTheme,
-      backgroundColor: newTheme ? '#000' : '#fff',
-      textColor: newTheme ? '#fff' : '#000',
+      darkMode: newTheme, //klo custom make ini
+      backgroundColor: newTheme ? '#000' : '#fff', //bisa make ini
+      textColor: newTheme ? '#fff' : '#000', // ini buat text
     };
     setTheme(updatedTheme);
 
